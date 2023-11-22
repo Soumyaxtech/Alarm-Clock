@@ -217,6 +217,7 @@ int main() {
                 printf("Alarm set for %02d:%02d\n", hour, minute);
                 break;
 
+
             case 2:
                 printf("Stopping alarm...\n");
                 // Code to stop the alarm (not implemented in this basic example)
