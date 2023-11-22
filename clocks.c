@@ -151,6 +151,7 @@ int main() {
                 scanf("%d", &alarms[totalAlarms].hour);
                 printf("Enter minute (0-59): ");
                 scanf("%d", &alarms[totalAlarms].minute);
+                printf("alarm set successfully");
                 alarms[totalAlarms].isActive = 1;
                 totalAlarms++;
                 break;
