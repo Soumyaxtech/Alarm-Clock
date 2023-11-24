@@ -8,6 +8,7 @@
 struct Alarm {
     int hour;
     int minute;
+    int second;
     int isActive;
 };
 
@@ -18,11 +19,11 @@ void displayCurrentTime() {
     now = time(NULL);
     localTime = localtime(&now);
 
-    printf("Current Time: %02d:%02d\n", localTime->tm_hour, localTime->tm_min);
+    printf("Current Time: %02d:%02d:%02d\n", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
 }
 
 void triggerAlarm(struct Alarm alarm) {
-    printf("\nALARM: %02d:%02d\n", alarm.hour, alarm.minute);
+    printf("\nALARM: %02d:%02d:%02d\n", alarm.hour, alarm.minute,alarm.second);
     printf("ALARM! ALARM! ALARM!\n");
     printf("It's Time to Wake up.... ");
 }
@@ -44,7 +45,8 @@ int main() {
         for (int i = 0; i < totalAlarms; i++) {
             if (alarms[i].isActive &&
                 alarms[i].hour == localTime->tm_hour &&
-                alarms[i].minute == localTime->tm_min) {
+                alarms[i].minute == localTime->tm_min &&
+                alarms[i].second == localTime->tm_sec) {
                 triggerAlarm(alarms[i]);
                 alarms[i].isActive = 0; // Deactivate the triggered alarm
             }
@@ -63,21 +65,24 @@ int main() {
                 }
 
                 printf("Enter hour (0-23): ");
-                int hour, minute;
+                int hour, minute,second;
                 scanf("%d", &hour);
                 printf("Enter minute (0-59): ");
                 scanf("%d", &minute);
+                 printf("Enter second (0-59): ");
+                scanf("%d", &second);
+               
 
                 // Validate input
-                if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-                    printf("Invalid time. Please enter a valid hour (0-23) and minute (0-59).\n");
+                if (hour < 0 || hour > 23 || minute < 0 || minute > 59|| second<0 || second>59) {
+                    printf("Invalid time. Please enter a valid hour (0-23) and minute (0-59) with proper second(0-59).\n");
                     break;
                 }
 
                 // Check for alarm conflicts
                 int conflict = 0;
                 for (int i = 0; i < totalAlarms; i++) {
-                    if (alarms[i].hour == hour && alarms[i].minute == minute) {
+                    if (alarms[i].hour == hour && alarms[i].minute == minute && alarms[i].second == second) {
                         conflict = 1;
                         printf("Conflict: An alarm is already set for this time.\n");
                         break;
@@ -90,9 +95,10 @@ int main() {
 
                 alarms[totalAlarms].hour = hour;
                 alarms[totalAlarms].minute = minute;
+                alarms[totalAlarms].second = second;
                 alarms[totalAlarms].isActive = 1;
                 totalAlarms++;
-                printf("Alarm set for %02d:%02d\n", hour, minute);
+                printf("Alarm set for %02d:%02d:%02d\n", hour, minute,second);
                 break;
 
 
