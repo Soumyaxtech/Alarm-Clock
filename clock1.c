@@ -5,14 +5,16 @@
 
 #define MAX_ALARMS 10
 
-struct Alarm {
+struct Alarm
+{
     int hour;
     int minute;
     int second;
     int isActive;
 };
 
-void displayCurrentTime() {
+void displayCurrentTime()
+{
     time_t now;
     struct tm *localTime;
 
@@ -22,74 +24,107 @@ void displayCurrentTime() {
     printf("Current Time: %02d:%02d:%02d\n", localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
 }
 
-void triggerAlarm(struct Alarm alarm) {
-    printf("\nALARM: %02d:%02d:%02d\n", alarm.hour, alarm.minute,alarm.second);
+void triggerAlarm(struct Alarm alarm)
+{
+    printf("\nALARM: %02d:%02d:%02d\n", alarm.hour, alarm.minute, alarm.second);
     printf("ALARM! ALARM! ALARM!\n");
     printf("It's Time to Wake up.... ");
 }
 
-int main() {
+int main()
+{
     struct Alarm alarms[MAX_ALARMS];
     int totalAlarms = 0;
 
-    while (1) {
+    printf("How many alarms do you want to set? (Max %d): ", MAX_ALARMS);
+    int numAlarms;
+    scanf("%d", &numAlarms);
+
+    while (1)
+    {
         displayCurrentTime();
 
-        time_t currentTime;
-        struct tm *localTime;
+        // time_t currentTime;
+        // struct tm *localTime;
 
-        currentTime = time(NULL);
-        localTime = localtime(&currentTime);
+        // currentTime = time(NULL);
+        // localTime = localtime(&currentTime);
+        time_t currentTime = time(NULL);
+        
+struct tm *localTime = localtime(&currentTime);
+time_t alarmTime = mktime(&alarms);
+
+if (currentTime == alarmTime) {
+  triggerAlarm(alarms[0]);
+  alarms[0].isActive = 0; // Reset the isActive flag after triggering the alarm
+}
+
 
         // Check if any alarms need to be triggered
-        for (int i = 0; i < totalAlarms; i++) {
-            if (alarms[i].isActive &&
+        for (int i = 0; i < totalAlarms; i++)
+        {
+            printf("%d\n", alarms[i].hour);
+            printf("%d\n", alarms[i].minute);
+            printf("%d\n", alarms[i].second);
+            printf("%d\n", localTime->tm_hour);
+            printf("%d\n", localTime->tm_min);
+            printf("%d\n", localTime->tm_sec);
+            if (alarms[i].isActive == 1 &&
                 alarms[i].hour == localTime->tm_hour &&
                 alarms[i].minute == localTime->tm_min &&
-                alarms[i].second == localTime->tm_sec) {
+                alarms[i].second == localTime->tm_sec)
+
+            {
                 triggerAlarm(alarms[i]);
-                alarms[i].isActive = 0; // Deactivate the triggered alarm
+                alarms[i].isActive = 0;
+                // Deactivate the triggered alarm
             }
         }
 
-        printf("\n1. Set Alarm\n2. Stop Alarm\n3. Snooze Alarm\n4. Exit\n");
-        int choice;
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
-        switch (choice) {
+       
+        
+            printf("\n1. Set Alarm\n2. Stop Alarm\n3. Snooze Alarm\n4. Exit\n");
+            int choice;
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+            switch (choice)
+            {
             case 1:
-                if (totalAlarms >= MAX_ALARMS) {
+                if (totalAlarms >= MAX_ALARMS)
+                {
                     printf("Maximum number of alarms reached.\n");
                     break;
                 }
 
                 printf("Enter hour (0-23): ");
-                int hour, minute,second;
+                int hour, minute, second;
                 scanf("%d", &hour);
                 printf("Enter minute (0-59): ");
                 scanf("%d", &minute);
-                 printf("Enter second (0-59): ");
+                printf("Enter second (0-59): ");
                 scanf("%d", &second);
-               
 
                 // Validate input
-                if (hour < 0 || hour > 23 || minute < 0 || minute > 59|| second<0 || second>59) {
+                if (hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59)
+                {
                     printf("Invalid time. Please enter a valid hour (0-23) and minute (0-59) with proper second(0-59).\n");
                     break;
                 }
 
                 // Check for alarm conflicts
                 int conflict = 0;
-                for (int i = 0; i < totalAlarms; i++) {
-                    if (alarms[i].hour == hour && alarms[i].minute == minute && alarms[i].second == second) {
+                for (int i = 0; i < totalAlarms; i++)
+                {
+                    if (alarms[i].hour == hour && alarms[i].minute == minute && alarms[i].second == second)
+                    {
                         conflict = 1;
                         printf("Conflict: An alarm is already set for this time.\n");
                         break;
                     }
                 }
 
-                if (conflict) {
+                if (conflict)
+                {
                     break;
                 }
 
@@ -98,9 +133,8 @@ int main() {
                 alarms[totalAlarms].second = second;
                 alarms[totalAlarms].isActive = 1;
                 totalAlarms++;
-                printf("Alarm set for %02d:%02d:%02d\n", hour, minute,second);
+                printf("Alarm set for %02d:%02d:%02d\n", hour, minute, second);
                 break;
-
 
             case 2:
                 printf("Stopping alarm...\n");
@@ -119,10 +153,11 @@ int main() {
 
             default:
                 printf("Invalid choice! Please try again.\n");
+            
         }
 
         // Delay for 1 minute before checking again
-        sleep(60);
+        sleep(1);
     }
 
     return 0;
