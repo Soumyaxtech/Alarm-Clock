@@ -159,6 +159,7 @@ if (currentTime == alarmTime) {
         // Delay for 1 minute before checking again
         sleep(1);
     }
+    
 
     return 0;
 }
