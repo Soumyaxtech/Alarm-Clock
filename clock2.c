@@ -28,6 +28,7 @@ void triggerAlarm(struct Alarm alarm) {
     printf("It's Time to Wake up.... ");
 }
 
+
 int main() {
     struct Alarm alarms[MAX_ALARMS];
     int totalAlarms = 0;
